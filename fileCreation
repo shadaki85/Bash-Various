@@ -56,6 +56,7 @@ function privs(){
 ### Entry point!
 echo "Hi, how many files do you want to create [1/10]";
 isValid="0";
+understood="0";
 
 ### While howMany answer is invalid repeat the request.
 while [ $isValid == "0" ]
@@ -69,7 +70,7 @@ for (( i=1; i<=$quantity; i++ )); do
 	read fileName;
 	touch $fileName;
 	echo -e "File number '$i' named '$fileName' created! Do you want me to set high privileges (754)? Y/N";
-	while [ $understood == "1" ]
+	while [ $understood == "0" ]
 	do
 		privs;
 	done;

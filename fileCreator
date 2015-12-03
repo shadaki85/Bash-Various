@@ -1,0 +1,113 @@
+#!/bin/bash
+
+#############
+#TODO: expand privileges functionality
+#############
+
+
+### Checking how many files/directories the user wants to create.
+function howMany(){
+	
+	read quantity;	
+	
+	if ! [[ "$quantity" =~ ^[0-9]+$ ]]; then
+		echo -e "Invalid input!";
+		isValid=0;
+	elif [ $quantity -gt 10 ]; then
+		echo -e "Sorry, i can create 10 $type maximum";
+		isValid=0;
+	elif [ $quantity -eq 0 ]; then
+		echo -e "Sorry, i can't create...0 $type...";
+		isValid=0;		
+	else
+	isValid=1;
+	
+	fi
+
+	}
+
+
+### Determine if we should set higher privileges to the new file/directory.
+function privs(){
+	read answer;
+	case "$answer" in
+
+	[yY])
+		chmod 754 $fileName;
+		ls -l $fileName;
+		understood=1;
+		echo -e "Privileges set!";
+		;;
+	[nN])
+		echo -e "Privileges NOT set!";
+		understood=1;	
+		;;
+	*)
+		echo -e "I didn't understand...";
+		understood=0;
+		;;	
+	esac;
+	}
+
+
+### Create $quantity of file/dir, asks for the name to assign and privileges
+function creation(){
+	
+	understood="0";
+	for (( i=1; i<=$quantity; i++ )); do
+		echo "Wich name should i assign to $type $i?";
+		read fileName;
+		if [ $type == "File" ]; then
+			touch $fileName;
+		else
+			mkdir $fileName;
+		fi
+		echo -e "$type number '$i' named '$fileName' created! Do you want to set high privileges (754)? Y/N";
+		while [ $understood == "0" ]
+		do
+			privs;
+		done;
+		understood="0";
+	done;
+}
+
+### Entry point!
+
+isValid="0";
+type="none";
+
+while getopts "d""f" opt; do
+	case $opt in
+	d)
+		type="Directory";
+		echo "Hi, how many directories do you want to create [1/10]";
+		### While howMany answer is invalid repeat the request.
+		while [ $isValid == "0" ]
+		do
+			howMany;
+			if [ $isValid == "1" ]; then
+				creation;
+			fi
+		done;
+		;;
+	f)
+		echo "Hi, how many files do you want to create [1/10]";
+		type="File";
+		### While howMany answer is invalid repeat the request.
+		while [ $isValid == "0" ]
+		do
+			howMany;
+			if [ $isValid == "1" ]; then
+				creation;
+			fi
+		done;
+		;;
+	\?)
+		echo "Invalid option: -$OPTARG"
+		echo "Usage: [-f] for file creation, [-d] for directory creation";
+		exit;
+		;;
+	esac
+done
+
+### Program ends!

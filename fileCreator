@@ -81,9 +81,10 @@ usage="Usage: [-f] for file creation, [-d] for directory creation";
 
 ### Entry point!
 
-## Checking if the user added too many params
-if [ "$#" -ne 2 ]; then
+## Checking if the user added too many params, gt is greater then
+if [ "$#" -gt 2 ]; then
 	echo "Wrong number of options!";
+	echo "$usage";
 	exit;
 fi
 

@@ -2,7 +2,7 @@
 
 #############
 #Script by .Shadaki.
-#TODO: add some funcionalities
+#TODO: add quantity directly in params
 #############
 
 
@@ -81,7 +81,7 @@ usage="Usage: [-f] for file creation, [-d] for directory creation";
 
 ### Entry point!
 
-## Checking if the user added too many params, gt is greater then
+## Checking if the user added too many params, gt is 'greater than'
 if [ "$#" -gt 2 ]; then
 	echo "Wrong number of options!";
 	echo "$usage";
@@ -92,6 +92,7 @@ fi
 while getopts "d""f" opt; do
 	case $opt in
 	d)
+	if [ "$2" != "" ]; then
 		option_found="1";
 		type="Directory";
 		echo "Hi, how many directories do you want to create [1/10]";
@@ -103,6 +104,10 @@ while getopts "d""f" opt; do
 				creation;
 			fi
 		done;
+	else
+	#Need to Finish it ############################
+		creation;
+	fi
 		;;
 	f)
 		option_found="1";
